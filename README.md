@@ -1,87 +1,131 @@
-ImageJ Particle Counting Protocol
-Assignment 1 – Image Analysis
+# ImageJ Particle Counting Protocol
 
-Step 0: Image Acquisition
-I first downloaded a raw fluorescence microscopy image from an online database (OpenCell/ImageJ sample datasets). I made sure that the particles in the image were clearly distinguishable from the background and that the image was not pre-processed.
+## Overview
 
-The original image was saved in the data/raw/ folder without modification. I also recorded the metadata of the image, including source, magnification, pixel size (if available), and staining/channel information, in a separate metadata file.
+This repository contains a reproducible workflow for particle detection and analysis using ImageJ on fluorescence microscopy images.
 
-Step 1: Opening and Pre-processing the Image
-I opened the image in ImageJ using: File → Open
+---
 
-To standardize the format, I converted the image to 8-bit grayscale: Image → Type → 8-bit
+## Step 0: Image Acquisition
 
-Next, I removed background noise using the subtract background function: Process → Subtract Background
+- Source: OpenCell / ImageJ sample datasets
 
-Rolling Ball Radius used: 12 pixels
-Light background option: Not selected
-This step helped in reducing uneven illumination and improving particle visibility.
+- Raw image stored in: `data/raw/`
 
-After that, I adjusted the brightness and contrast: Image → Adjust → Brightness/Contrast
+- Metadata recorded separately (magnification, pixel size, staining, etc.)
 
-I first applied Auto, and then manually fine-tuned the levels to make the particles more clearly visible without overexposing the image.
+---
 
-Step 2: Thresholding
-To separate particles from the background, I applied thresholding: Image → Adjust → Threshold
+## Step 1: Pre-processing
 
-Method used: Default
-Lower threshold value: 217
-Upper threshold value: 255
-Display mode: Black & White
-I adjusted the threshold sliders until the particles appeared clearly highlighted while minimizing background noise.
+1. Open image: `File → Open`
 
-After achieving a satisfactory selection, I applied the threshold to convert the image into a binary format.
+2. Convert to 8-bit:
 
-Since some particles were touching or clustered, I applied watershed segmentation: Process → Binary → Watershed
+   `Image → Type → 8-bit`
 
-This helped in separating overlapping particles by introducing 1 pixel boundaries between them.
+3. Background subtraction:
 
-Step 3: Setting Measurements
-Since the image did not contain a scale bar, I performed all measurements in pixel units.
+   `Process → Subtract Background`
 
-I then selected the parameters required for analysis: Analyze → Set Measurements
+   - Rolling ball radius: **12 pixels**
 
-The following measurements were selected:
+   - Light background: **No**
 
-Area
-Perimeter
-Feret’s Diameter
-Shape Descriptors
-Mean Gray Value
-Step 4: Particle Analysis
-I performed particle analysis using: Analyze → Analyze Particles
+4. Adjust brightness/contrast:
 
-The parameters used were:
+   `Image → Adjust → Brightness/Contrast`
 
-Size range: 50 – Infinity pixels²
-Circularity: 0.4 – 1.0
-These values were chosen to exclude very small noise particles and focus on roughly circular objects.
+   - Auto + manual fine-tuning
 
-The following options were enabled:
+---
 
-Display Results
-Summarize
-Exclude on Edges
-Add to Manager
-Overlay
-After running the analysis, a results table was generated along with an overlay showing detected particles.
+## Step 2: Thresholding
 
-Step 5: Saving and Exporting Results
-The results table was saved as a CSV file: Results → File → Save As
+1. Apply threshold:
 
-Saved in: results/stats/particle_count_results.csv
+   `Image → Adjust → Threshold`
 
-Next, I flattened the overlay to permanently embed the particle outlines on the image: Image → Overlay → Flatten
+   - Method: Default
 
-The processed image was then saved as a TIFF file: File → Save As → TIFF
+   - Range: **217–255**
 
-Saved in: data/processed/particle_analysis_annotated.tif
+   - Mode: Black & White
 
-Since no scale calibration was performed, no scale bar was added to the final image.
+2. Convert to binary
 
-Final Outcome
-At the end of the analysis, I obtained:
+3. Apply watershed:
 
-A CSV file containing quantitative measurements of all detected particles
-An annotated image with clearly marked particle boundaries
-This protocol ensures reproducible particle detection and analysis in ImageJ, with parameter selection tailored to the specific image.
+   `Process → Binary → Watershed`
+
+---
+
+## Step 3: Measurements
+
+`Analyze → Set Measurements`
+
+- Area
+
+- Perimeter
+
+- Feret’s Diameter
+
+- Shape Descriptors
+
+- Mean Gray Value
+
+---
+
+## Step 4: Particle Analysis
+
+`Analyze → Analyze Particles`
+
+Parameters:
+
+- Size: **50 – Infinity pixels²**
+
+- Circularity: **0.4 – 1.0**
+
+Options:
+
+- Display Results
+
+- Summarize
+
+- Exclude on Edges
+
+- Add to Manager
+
+- Overlay
+
+---
+
+## Step 5: Export Results
+
+- Save CSV:
+
+  `results/stats/particle_count_results.csv`
+
+- Flatten overlay:
+
+  `Image → Overlay → Flatten`
+
+- Save processed image:
+
+  `data/processed/particle_analysis_annotated.tif`
+
+---
+
+## Output
+
+- Quantitative particle measurements (CSV)
+
+- Annotated TIFF image
+
+---
+
+## Notes
+
+- Measurements are in pixel units (no calibration applied)
+
+- Parameters may need adjustment depending on image quality
